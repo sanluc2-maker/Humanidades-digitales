@@ -269,7 +269,7 @@
           <div class="carencia-body">
             <div class="carencia-name">Alimentación</div>
             <p class="carencia-desc">Es la dimensión más directamente afectada por tener más dinero disponible. Con más ingreso, las personas mayores pueden comprar mejor comida sin depender de otros.</p>
-            <div class="carencia-method">Medición: gasto alimentario per cápita del hogar por debajo del percentil 25 nacional ponderado.</div>
+            <div class="carencia-method">Medición: gasto alimentario per cápita del hogar por debajo del percentil 25 nacional ponderado. Esto significa que se ordenaron todos los hogares de México de menor a mayor gasto en comida por persona, y se marcó con carencia al 25% que menos gasta. Se usó este indicador como aproximación porque la Escala Mexicana de Seguridad Alimentaria (EMSA) — que usa el CONEVAL — no está disponible en todos los años del panel 2016–2024.</div>
           </div>
         </div>
         <div class="carencia-card red">
@@ -277,7 +277,7 @@
           <div class="carencia-body">
             <div class="carencia-name">Salud</div>
             <p class="carencia-desc">Es la dimensión de mayor riesgo para personas de 65 años o más y la más vinculada a los cambios en el sistema de cobertura médica del período 2018–2022.</p>
-            <div class="carencia-method">Medición: ausencia de seguridad social, IMSS-Bienestar o cualquier servicio médico prepagado privado.</div>
+            <div class="carencia-method">Medición: ausencia de seguridad social, IMSS-Bienestar o cualquier servicio médico prepagado privado. Esta definición sigue directamente los criterios oficiales del CONEVAL para la carencia de acceso a servicios de salud.</div>
           </div>
         </div>
         <div class="carencia-card amber">
@@ -285,7 +285,7 @@
           <div class="carencia-body">
             <div class="carencia-name">Vivienda</div>
             <p class="carencia-desc">Permite ver si la mejora económica se traduce en condiciones habitacionales más dignas.</p>
-            <div class="carencia-method">Medición: piso de tierra, sin agua intradomiciliaria, sin drenaje, sin electricidad de red, o hacinamiento mayor a 2.5 personas por cuarto.</div>
+            <div class="carencia-method">Medición: piso de tierra, sin agua intradomiciliaria, sin drenaje, sin electricidad de red, o hacinamiento mayor a 2.5 personas por cuarto. Esta definición sigue directamente los criterios oficiales del CONEVAL para la carencia de calidad y espacios de la vivienda.</div>
           </div>
         </div>
       </div>
@@ -305,43 +305,19 @@
 
     <div class="subsection">
       <div class="subsection-title">¿Por qué el método de Diferencias en Diferencias y no otro?</div>
-      <p>Existen varias formas de evaluar el impacto de una política pública:</p>
-      <div class="did-comparison">
-        <div class="did-option">
-          <div class="did-option-title">
-            Comparar antes y después del mismo grupo
-            <span class="badge badge-no">No elegido</span>
-          </div>
-          <p>El problema es que no puedes saber si el cambio se debe a la política o a otros factores que ocurrieron al mismo tiempo, como la pandemia o la inflación.</p>
-        </div>
-        <div class="did-option">
-          <div class="did-option-title">
-            Comparar quienes reciben vs quienes no reciben en el mismo momento
-            <span class="badge badge-no">No elegido</span>
-          </div>
-          <p>El problema es que los grupos pueden ser muy diferentes desde el principio, lo que hace la comparación injusta.</p>
-        </div>
-        <div class="did-option chosen">
-          <div class="did-option-title">
-            Diferencias en Diferencias (DiD)
-            <span class="badge badge-chosen">Método elegido</span>
-          </div>
-          <p>Combina ambas comparaciones al mismo tiempo. Compara el cambio del grupo que recibió la política contra el cambio del grupo que no la recibió, en el mismo período. Esto cancela los efectos de factores externos que afectan a todos por igual.</p>
-        </div>
-      </div>
-      <p>En este proyecto, DiD es el método más apropiado porque:</p>
+      <p>El método de Diferencias en Diferencias (DiD) se eligió por tres razones prácticas y metodológicas:</p>
       <div class="numbered-list">
         <div class="numbered-item">
           <div class="num">1</div>
-          <p>No es posible hacer un experimento aleatorio — no se puede asignar aleatoriamente quién recibe la pensión.</p>
+          <p><strong>Es compatible con los datos disponibles.</strong> La ENIGH es una encuesta de corte transversal repetido — no sigue a las mismas personas, sino que encuesta a hogares distintos cada dos años. El DiD funciona exactamente con este tipo de datos porque no necesita seguimiento individual, sino comparar grupos y períodos.</p>
         </div>
         <div class="numbered-item">
           <div class="num">2</div>
-          <p>Existen datos de varios años antes y después del cambio de política de 2022.</p>
+          <p><strong>Controla por factores externos.</strong> Entre 2016 y 2024 ocurrieron muchas cosas además de los cambios en la pensión — la pandemia, la inflación, cambios de gobierno. El DiD cancela esos efectos porque los compara en ambos grupos al mismo tiempo. Si algo afectó a todos por igual, no distorsiona el resultado.</p>
         </div>
         <div class="numbered-item">
           <div class="num">3</div>
-          <p>El grupo de 60–64 años es un grupo de comparación razonable — muy similar en edad, salud y nivel socioeconómico, pero justo fuera del umbral de elegibilidad.</p>
+          <p><strong>No requiere un experimento.</strong> No es posible asignar aleatoriamente quién recibe la pensión. El DiD resuelve esto usando al grupo de 60–64 años como punto de comparación natural — un grupo muy similar que simplemente está fuera del umbral de elegibilidad por edad.</p>
         </div>
       </div>
       <div class="callout">
