@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historias — Datos con Rostro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #fff; color: #111; overflow-x: hidden; }
+
+/* BANNER */
+.banner { width: 100%; max-height: 300px; overflow: hidden; }
+.banner img { width: 100%; object-fit: cover; object-position: center 30%; display: block; }
+
+/* INTRO */
+.intro { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 1rem; }
+.intro-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+.intro-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700; color: #111;
+  line-height: 1.15; margin-bottom: 1rem;
+}
+.intro-title em { font-style: italic; font-weight: 400; }
+.intro-desc { font-size: 15px; color: #555; line-height: 1.8; max-width: 640px; }
+
+/* SECTION DIVIDER */
+.divider-label {
+  max-width: 900px; margin: 3rem auto 0;
+  padding: 0 2rem;
+  display: flex; align-items: center; gap: 14px;
+}
+.divider-label span {
+  font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: #111;
+  font-weight: 600; white-space: nowrap;
+}
+.divider-label::before, .divider-label::after {
+  content: ''; flex: 1; height: 1px; background: #e5e5e5;
+}
+
+/* HISTORIAS */
+.historias-wrap { max-width: 900px; margin: 0 auto; }
+
+.historia {
+  padding: 3rem 2rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+.historia:last-of-type { border-bottom: none; }
+
+.historia-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 80px; font-weight: 400;
+  color: #ebebeb; line-height: 1;
+  float: left; margin-right: 1rem;
+  margin-top: -0.1em;
+}
+
+.historia-meta {
+  font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: #888;
+  margin-bottom: 0.75rem;
+}
+
+.historia-frase {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(19px, 2.8vw, 25px);
+  font-style: italic; font-weight: 400;
+  color: #111; line-height: 1.45;
+  margin-bottom: 1.5rem; clear: both;
+  padding: 1rem 0;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+}
+
+.historia-texto {
+  font-size: 15px; line-height: 1.9;
+  color: #444; margin-bottom: 1.1rem;
+}
+.historia-texto em { font-style: italic; color: #111; }
+
+.historia-texto.capitular::first-letter {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.8em; font-weight: 700;
+  float: left; line-height: 0.7;
+  margin-right: 0.08em; margin-top: 0.12em;
+  color: #111;
+}
+
+/* DIMENSIONES — colores variados no genéricos */
+.dims { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1.5rem; }
+.dim {
+  font-size: 11px; padding: 5px 13px;
+  border-radius: 99px; font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.3px;
+}
+.dim-verde   { background: #e8f4e8; color: #1a5c1a; }
+.dim-rojo    { background: #fceaea; color: #8b1a1a; }
+.dim-gris    { background: #f0f0f0; color: #555; }
+
+.historia-pie {
+  font-size: 11px; color: #bbb;
+  margin-top: 1rem; font-style: italic;
+}
+
+/* CARRUSEL */
+.carrusel-section { padding: 2rem 0 3rem; }
+
+.carrusel-outer {
+  overflow: hidden; position: relative;
+  padding: 1rem 0;
+}
+.carrusel-outer::before,
+.carrusel-outer::after {
+  content: ''; position: absolute;
+  top: 0; bottom: 0; width: 80px;
+  z-index: 2; pointer-events: none;
+}
+.carrusel-outer::before { left: 0; background: linear-gradient(to right, #fff, transparent); }
+.carrusel-outer::after  { right: 0; background: linear-gradient(to left, #fff, transparent); }
+
+.carrusel-track {
+  display: flex; gap: 14px;
+  width: max-content;
+  animation: scroll-left 44s linear infinite;
+}
+.carrusel-track:hover { animation-play-state: paused; }
+
+@keyframes scroll-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Tarjetas del carrusel — colores variados */
+.voz-card {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: flex; flex-direction: column; gap: 10px;
+  width: 270px; flex-shrink: 0;
+  border: none;
+  transition: transform 0.2s;
+}
+.voz-card:hover { transform: translateY(-3px); }
+
+.voz-card:nth-child(3n)   { background: #f5f0eb; }
+.voz-card:nth-child(3n+1) { background: #f0f4f5; }
+.voz-card:nth-child(3n+2) { background: #f7f5f0; }
+
+.voz-nombre {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px; font-weight: 700; color: #111;
+}
+.voz-lugar { font-size: 11px; color: #999; margin-top: -4px; }
+.voz-dims { display: flex; gap: 5px; flex-wrap: wrap; }
+.voz-cita {
+  font-size: 13px; line-height: 1.65;
+  color: #555; font-style: italic;
+}
+
+/* CTA */
+.cta-section { max-width: 900px; margin: 0 auto; padding: 0 2rem 3.5rem; }
+.cta-box {
+  background: #111; border-radius: 14px;
+  padding: 2rem 2.5rem;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem; flex-wrap: wrap;
+}
+.cta-box p {
+  font-size: 15px; color: #ccc;
+  line-height: 1.7; flex: 1;
+}
+.cta-box strong { color: #fff; }
+.cta-btn {
+  display: inline-block;
+  background: #fff; color: #111;
+  font-size: 13px; font-weight: 600;
+  padding: 12px 24px; border-radius: 99px;
+  text-decoration: none; white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s;
+}
+.cta-btn:hover { background: #eee; }
+
+/* FOOTER */
+.footer {
+  background: #f7f7f7; border-top: 1px solid #eee;
+  padding: 2rem; text-align: center;
+  font-size: 11px; color: #aaa; line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .historia { padding: 2.5rem 1.25rem; }
+  .cta-section { padding: 0 1.25rem 2.5rem; }
+  .cta-box { flex-direction: column; }
+  .divider-label { padding: 0 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <img src="https://sanluc2-maker.github.io/explorador_carencias/banner_historias.png" alt="Historias — Datos con Rostro">
+</div>
+
+<!-- INTRO -->
+<div class="intro">
+  <div class="intro-eyebrow">Datos con Rostro · Historias</div>
+  <h1 class="intro-title">Historias que los <em>datos no capturan</em></h1>
+  <p class="intro-desc">La Pensión para el Bienestar se vive en la vida cotidiana de millones de personas. Estas son algunas de sus voces — recogidas en entrevistas presenciales y a través de este sitio.</p>
+</div>
+
+<!-- HISTORIAS ESTELARES -->
+<div class="divider-label">
+  <span>Voces recogidas en el Hub Tecnológico de Monterrey</span>
+</div>
+
+<div class="historias-wrap">
+
+  <!-- I: Juanita -->
+  <div class="historia">
+    <div class="historia-num">I</div>
+    <div class="historia-meta">Juanita Treviño Álvarez · 65 años · Nuevo León</div>
+    <blockquote class="historia-frase">"A mí me gusta ayudar a la gente, por eso yo la regalo."</blockquote>
+    <p class="historia-texto capitular">Juanita es viuda y tiene otra pensión, así que la Pensión Bienestar no la necesita para sobrevivir. La usa diferente: la da. La reparte entre quien la necesita más cerca.</p>
+    <p class="historia-texto">Pero cuando habla de su mamá, que aún vive, la historia cambia de tono. El médico de la colonia receta puro medicamento caro. La pensión es lo que cubre esa brecha. También es lo que permite comprarse unos tenis cuando se antoja, o un churro en la tarde.</p>
+    <p class="historia-texto">Y algo más concreto: seguridad crediticia. <em>"Sé que voy a tener con qué pagar"</em>, dice. Para Juanita, la pensión no es un ingreso — es una red.</p>
+    <div class="dims">
+      <span class="dim dim-verde">🍽️ Alimentación mejoró</span>
+      <span class="dim dim-verde">🏥 Salud mejoró</span>
+      <span class="dim dim-verde">🏠 Vivienda mejoró</span>
+    </div>
+    <div class="historia-pie">Entrevista presencial · Hub Tec Monterrey · 2026</div>
+  </div>
+
+  <!-- II: Cynthia -->
+  <div class="historia">
+    <div class="historia-num">II</div>
+    <div class="historia-meta">Cynthia Vallejo · 27 años · Nuevo León · habla por su abuelo de 80</div>
+    <blockquote class="historia-frase">"Antes tenía que salir a trabajar todos los días para poder comer. Ahora ya no."</blockquote>
+    <p class="historia-texto capitular">Cynthia no tiene 65 años pero conoce la historia mejor que nadie: la vive desde adentro. Su abuelo tiene 80 años. Antes de recibir la pensión, salía a trabajar todos los días — a los 80 años, bajo el sol de Monterrey.</p>
+    <p class="historia-texto">Un día le dio un golpe de calor. Pudo atenderse porque tenía el dinero de la pensión guardado. Eso fue lo que lo salvó. Hoy ya no trabaja. Come. Descansa.</p>
+    <p class="historia-texto">Pero Cynthia señala lo que falta: su abuelo no tiene IMSS. La pensión llegó a la mesa, pero la sala de espera del médico sigue vacía.</p>
+    <div class="dims">
+      <span class="dim dim-verde">🍽️ Alimentación mejoró</span>
+      <span class="dim dim-rojo">🏥 Salud no mejoró</span>
+      <span class="dim dim-verde">🏠 Vivienda mejoró</span>
+    </div>
+    <div class="historia-pie">Entrevista presencial · Hub Tec Monterrey · 2026</div>
+  </div>
+
+  <!-- III: Martha -->
+  <div class="historia">
+    <div class="historia-num">III</div>
+    <div class="historia-meta">Martha Alicia · Nuevo León · habla por sus papás</div>
+    <blockquote class="historia-frase">"Mis papás están solos."</blockquote>
+    <p class="historia-texto capitular">Martha no recibe la pensión — no quiso formarse. Pero sus papás sí. Ella dice que ha mejorado en comida y en pagar servicios.</p>
+    <p class="historia-texto">No da más detalles. A veces las historias más cortas dicen lo más importante: hay dos personas mayores, están solas, y la pensión es parte de lo poco que tienen.</p>
+    <div class="dims">
+      <span class="dim dim-verde">🍽️ Alimentación mejoró</span>
+      <span class="dim dim-gris">🏥 Salud igual</span>
+      <span class="dim dim-verde">🏠 Vivienda mejoró</span>
+    </div>
+    <div class="historia-pie">Entrevista presencial · Hub Tec Monterrey · 2026</div>
+  </div>
+
+</div>
+
+<!-- CARRUSEL -->
+<div class="carrusel-section">
+  <div class="divider-label">
+    <span>Voces del formulario ciudadano</span>
+  </div>
+
+  <div class="carrusel-outer" style="margin-top:2rem">
+    <div class="carrusel-track">
+
+      <div class="voz-card">
+        <div class="voz-nombre">Don Ernesto</div>
+        <div class="voz-lugar">Aguascalientes · 65 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏥 Mejoró</span>
+          <span class="dim dim-gris" style="font-size:11px">🏠 Igual</span>
+        </div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Carmen</div>
+        <div class="voz-lugar">Nuevo León · 65 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Todo suma y muchas gracias."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Don Rogelio</div>
+        <div class="voz-lugar">Nuevo León · 68 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-gris" style="font-size:11px">🍽️ Igual</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏠 No mejoró</span>
+        </div>
+        <div class="voz-cita">"Es una ayuda que se agradece."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Esperanza</div>
+        <div class="voz-lugar">Nuevo León · 66 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-gris" style="font-size:11px">🍽️ Igual</span>
+          <span class="dim dim-verde" style="font-size:11px">🏥 Mejoró</span>
+          <span class="dim dim-gris" style="font-size:11px">🏠 Igual</span>
+        </div>
+        <div class="voz-cita">"Gracias."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Don Aurelio</div>
+        <div class="voz-lugar">Coahuila · 67 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Muchas gracias."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Guadalupe</div>
+        <div class="voz-lugar">Yucatán · 73 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Que la mantenga, no la vayan a suspender."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Consuelo</div>
+        <div class="voz-lugar">Coahuila · 65 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏥 Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Mil gracias, cambiaste mi vida."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Don Jacinto</div>
+        <div class="voz-lugar">Tabasco · 72 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏥 Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Gracias a eso hemos resuelto algunas cosas."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Refugio</div>
+        <div class="voz-lugar">Tabasco · 79 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Es un buen apoyo, hemos resuelto algunas emergencias."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Don Leopoldo</div>
+        <div class="voz-lugar">Baja California · 71 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-gris" style="font-size:11px">🏥 Igual</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏠 No mejoró</span>
+        </div>
+        <div class="voz-cita">"Gracias por el apoyo a los adultos mayores."</div>
+      </div>
+
+      <div class="voz-card">
+        <div class="voz-nombre">Don Félix</div>
+        <div class="voz-lugar">Tabasco · 79 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Gracias por el apoyo que nos brindan."</div>
+      </div>
+
+      <!-- Duplicado para loop infinito -->
+      <div class="voz-card">
+        <div class="voz-nombre">Don Ernesto</div>
+        <div class="voz-lugar">Aguascalientes · 65 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏥 Mejoró</span>
+          <span class="dim dim-gris" style="font-size:11px">🏠 Igual</span>
+        </div>
+      </div>
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Carmen</div>
+        <div class="voz-lugar">Nuevo León · 65 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Todo suma y muchas gracias."</div>
+      </div>
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Consuelo</div>
+        <div class="voz-lugar">Coahuila · 65 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏥 Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Mil gracias, cambiaste mi vida."</div>
+      </div>
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Guadalupe</div>
+        <div class="voz-lugar">Yucatán · 73 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Que la mantenga, no la vayan a suspender."</div>
+      </div>
+      <div class="voz-card">
+        <div class="voz-nombre">Don Jacinto</div>
+        <div class="voz-lugar">Tabasco · 72 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏥 Mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Gracias a eso hemos resuelto algunas cosas."</div>
+      </div>
+      <div class="voz-card">
+        <div class="voz-nombre">Doña Refugio</div>
+        <div class="voz-lugar">Tabasco · 79 años</div>
+        <div class="voz-dims">
+          <span class="dim dim-verde" style="font-size:11px">🍽️ Mejoró</span>
+          <span class="dim dim-rojo" style="font-size:11px">🏥 No mejoró</span>
+          <span class="dim dim-verde" style="font-size:11px">🏠 Mejoró</span>
+        </div>
+        <div class="voz-cita">"Es un buen apoyo, hemos resuelto algunas emergencias."</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-box">
+    <p>¿Eres mayor de 65 años y recibes la Pensión para el Bienestar? <strong>Tu historia también importa.</strong> Comparte tu experiencia y aparecerá en el mapa.</p>
+    <a class="cta-btn" href="https://tally.so/r/81AY1x" target="_blank">Compartir mi historia →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Historias recopiladas mediante entrevistas presenciales en el Hub Tecnológico de Monterrey y formulario ciudadano en línea<br>
+  Los nombres del formulario son ficticios para proteger la identidad de los participantes<br>
+  Proyecto académico · Sandra Lucía Martínez Flores · A01794929 · ITESM 2026
+</div>
+
+</body>
+</html>
