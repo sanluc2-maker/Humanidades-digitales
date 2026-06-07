@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre el proyecto — Datos con Rostro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #fff; color: #111; }
+.wrapper { max-width: 1000px; margin: 0 auto; padding: 3.5rem 2rem 4.5rem; }
+
+.eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+.page-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  color: #111;
+  line-height: 1.1;
+  margin-bottom: 2.5rem;
+}
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+@media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+.card { background: #f7f7f7; border-radius: 12px; padding: 1.75rem; }
+
+/* Avatar */
+.avatar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem; }
+.avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: #111; display: flex; align-items: center;
+  justify-content: center; font-size: 15px; font-weight: 700;
+  color: #fff; flex-shrink: 0;
+}
+.avatar-name { font-size: 15px; font-weight: 600; color: #111; }
+.avatar-sub { font-size: 12px; color: #888; margin-top: 2px; }
+
+.divider { height: 1px; background: #e5e5e5; margin-bottom: 1.25rem; }
+
+/* Rows */
+.row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.row-icon { font-size: 17px; margin-top: 1px; flex-shrink: 0; }
+.row-label { font-size: 11px; color: #888; margin-bottom: 2px; letter-spacing: 0.5px; text-transform: uppercase; }
+.row-value { font-size: 14px; color: #111; line-height: 1.55; }
+.row-value a { color: #111; text-decoration: underline; }
+
+/* CTA */
+.cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700;
+  color: #111; margin-bottom: 8px;
+}
+.cta-desc { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 1.25rem; }
+
+.btn {
+  background: #111; border: none; border-radius: 8px;
+  padding: 12px 20px; color: #fff; font-size: 14px;
+  font-weight: 500; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  text-decoration: none; font-family: 'Inter', sans-serif;
+}
+.btn:hover { background: #333; }
+
+.redes-label { font-size: 12px; color: #888; margin-bottom: 10px; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid #e5e5e5; text-transform: uppercase; letter-spacing: 1px; }
+
+.fb-btn {
+  background: #fff; border: 1px solid #e5e5e5; border-radius: 8px;
+  padding: 10px 16px; display: inline-flex; align-items: center;
+  gap: 10px; font-size: 14px; color: #111; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-weight: 500;
+}
+.fb-btn:hover { background: #f7f7f7; }
+
+/* Footer */
+.footer-note {
+  background: #f7f7f7; border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+}
+.footer-note p { font-size: 13px; color: #888; line-height: 1.7; font-style: italic; margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="eyebrow">Datos con Rostro · ITESM 2026</div>
+  <h1 class="page-title">Sobre el proyecto</h1>
+
+  <div class="grid">
+
+    <!-- Columna izquierda -->
+    <div class="card">
+      <div class="avatar-row">
+        <div class="avatar">SL</div>
+        <div>
+          <div class="avatar-name">Sandra Lucía Martínez Flores</div>
+          <div class="avatar-sub">A01794929</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="row">
+        <div class="row-icon">🎓</div>
+        <div>
+          <div class="row-label">Institución</div>
+          <div class="row-value">Maestría en Humanidades Digitales · ITESM 2026</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-icon">🤝</div>
+        <div>
+          <div class="row-label">Socio formador</div>
+          <div class="row-value">Carlos Bejos Acebo · Gerencia Nacional de Inclusión Digital, Tec de Monterrey</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-icon">✉️</div>
+        <div>
+          <div class="row-label">Contacto</div>
+          <div class="row-value"><a href="mailto:A01794929@tec.mx">A01794929@tec.mx</a></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-icon">📄</div>
+        <div>
+          <div class="row-label">Código y datos</div>
+          <div class="row-value">Disponibles bajo solicitud — escríbenos al correo.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="cta-title">¿Tienes más de 65 años?</div>
+      <div class="cta-desc">Tu historia puede enriquecer este proyecto. Comparte tu experiencia con la Pensión Bienestar — toma menos de 3 minutos y es anónimo.</div>
+      <a class="btn" href="https://tally.so/r/81AY1x" target="_blank">
+        📋 Compartir mi historia
+      </a>
+
+      <div class="redes-label">Síguenos en redes</div>
+      <div class="fb-btn" onclick="window.open('https://www.facebook.com/profile.php?id=61590817944120','_blank')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.883v2.258h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+        <span>Datos con Rostro</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    <p>Este proyecto fue desarrollado como proyecto final de la Maestría en Humanidades Digitales en el Tecnológico de Monterrey, 2026. El código y los datos están disponibles bajo solicitud.</p>
+  </div>
+
+</div>
+</body>
+</html>
