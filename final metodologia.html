@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metodología — Datos con Rostro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #007B7F;
+    --teal-light: #E8F5F5;
+    --dark: #1a1a1a;
+    --gray: #666;
+    --light-gray: #f7f7f7;
+    --border: #e5e5e5;
+    --green: #3B6D11;
+    --red: #A32D2D;
+    --amber: #7a4f1a;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Lora', Georgia, serif;
+    background: #fff;
+    color: var(--dark);
+    line-height: 1.8;
+  }
+
+  /* LAYOUT */
+  .wrapper { max-width: 780px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+  /* HEADER */
+  .page-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e5e5e5; }
+  .page-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: #111;
+    margin-bottom: 1rem;
+  }
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700; line-height: 1.15;
+    color: #111; margin-bottom: 1rem;
+  }
+  .page-intro {
+    font-size: 16px; color: #444;
+    line-height: 1.85; max-width: 680px;
+  }
+
+  /* SECTION */
+  .section { margin-bottom: 3.5rem; }
+  .section-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: #888;
+    font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 700; color: #111;
+    margin-bottom: 1.5rem; line-height: 1.2;
+    padding-left: 0;
+  }
+
+  /* SUBSECTION */
+  .subsection { margin-bottom: 2rem; }
+  .subsection-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--dark); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .subsection-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border);
+  }
+
+  p { font-size: 15px; color: #3a3a3a; margin-bottom: 1rem; line-height: 1.85; }
+
+  /* CONEVAL LIST */
+  .coneval-list {
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 1.5rem 1.75rem;
+    margin: 1.25rem 0;
+
+  }
+  .coneval-list ol {
+    padding-left: 1.25rem;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .coneval-list li {
+    font-size: 14px; color: #444;
+    line-height: 1.6;
+  }
+  .coneval-list li strong { color: var(--dark); }
+
+  /* CARENCIA CARDS */
+  .carencia-cards { display: flex; flex-direction: column; gap: 0.875rem; margin: 1.5rem 0; }
+  .carencia-card {
+    background: #f7f7f7;
+    border: none;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .carencia-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+  .carencia-card.green { }
+  .carencia-card.red   { }
+  .carencia-card.amber { }
+  .carencia-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+  .carencia-body {}
+  .carencia-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--dark); margin-bottom: 4px;
+  }
+  .carencia-desc { font-size: 13px; color: #555; line-height: 1.65; margin: 0; }
+  .carencia-method {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; color: #888;
+    margin-top: 6px; font-style: italic;
+  }
+
+  /* DID COMPARISON */
+  .did-comparison { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.5rem 0; }
+  .did-option {
+    background: #f7f7f7;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+  }
+  .did-option.chosen { background: #111; } .did-option.chosen .did-option-title { color: #fff; } .did-option.chosen p { color: rgba(255,255,255,0.75); }
+  .did-option-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--dark); margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .did-option-title .badge {
+    font-size: 10px; padding: 2px 8px;
+    border-radius: 99px; font-weight: 600;
+  }
+  .badge-chosen { background: #111; color: #fff; }
+  .badge-no     { background: #f0f0f0; color: #888; }
+  .did-option p { font-size: 13px; color: #555; margin: 0; line-height: 1.6; }
+
+  /* CALLOUT */
+  .callout {
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .callout p { font-size: 14px; color: #2a4a4a; margin: 0; line-height: 1.7; }
+  .callout strong { color: #111; }
+
+  .callout-warning { background: #f7f7f7; }
+  .callout-warning p { color: #444; }
+  .callout-warning strong { color: #111; }
+
+  /* NUMBERED LIST */
+  .numbered-list { display: flex; flex-direction: column; gap: 0.75rem; margin: 1rem 0; }
+  .numbered-item { display: flex; align-items: flex-start; gap: 12px; }
+  .numbered-item .num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #111; color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .numbered-item p { margin: 0; font-size: 14px; color: #444; line-height: 1.65; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 2.5rem 0; }
+  .ornamento { text-align: center; color: #ccc; font-size: 20px; letter-spacing: 8px; margin: 2rem 0; }
+
+  /* REFERENCES */
+  .references { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .references h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 1.25rem;
+  }
+  .ref-item {
+    font-size: 13px; color: #555;
+    line-height: 1.7; margin-bottom: 0.75rem;
+    padding-left: 1.5rem; text-indent: -1.5rem;
+  }
+  .ref-item a { color: #111; text-decoration: underline; }
+  .ref-item a:hover { text-decoration: underline; }
+
+  /* FOOTER */
+  .footer-note {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: #f7f7f7;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; color: #888;
+    text-align: center; line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .wrapper { padding: 2rem 1.25rem 4rem; }
+    .carencia-card { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-label">Datos con Rostro · Humanidades Digitales</div>
+    <h1 class="page-title">Metodología</h1>
+    <p class="page-intro">Este proyecto combina tres fuentes de análisis distintas para responder una pregunta que ninguna sola puede responder completamente: ¿cómo cambió la vida de los adultos mayores en México después de 2022?</p>
+  </div>
+
+  <!-- SECCIÓN 1: DATOS ESTADÍSTICOS -->
+  <div class="section">
+    <div class="section-number">Sección 01</div>
+    <h2 class="section-title">Los datos estadísticos — ¿qué miden y cómo?</h2>
+
+    <div class="subsection">
+      <div class="subsection-title">La fuente</div>
+      <p>Usamos los microdatos de la Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH) del INEGI, que encuesta a miles de hogares mexicanos cada dos años. Analizamos cinco ediciones: 2016, 2018, 2020, 2022 y 2024.</p>
+      <p>Todo el procesamiento estadístico se realizó en <strong>R</strong>, un lenguaje de programación especializado en análisis de datos, usando tres paquetes principales: <strong>data.table</strong> para manejar grandes volúmenes de información de manera eficiente, <strong>fixest</strong> para estimar el modelo estadístico con efectos fijos, y <strong>syuzhet</strong> para el análisis de sentimiento en los comentarios de redes sociales.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Cómo mide la pobreza el CONEVAL?</div>
+      <p>El Consejo Nacional de Evaluación de la Política de Desarrollo Social (CONEVAL) es la institución oficial en México que mide la pobreza. Su metodología considera que una persona vive en pobreza cuando tiene ingresos insuficientes <em>y</em> al menos una de seis carencias sociales:</p>
+      <div class="coneval-list">
+        <ol>
+          <li><strong>Rezago educativo</strong></li>
+          <li><strong>Acceso a servicios de salud</strong></li>
+          <li><strong>Acceso a seguridad social</strong></li>
+          <li><strong>Calidad y espacios de la vivienda</strong></li>
+          <li><strong>Acceso a servicios básicos en la vivienda</strong></li>
+          <li><strong>Acceso a alimentación nutritiva y de calidad</strong></li>
+        </ol>
+      </div>
+      <p>Ninguna de estas carencias por sí sola define la pobreza — es la combinación de ingresos bajos con carencias sociales lo que determina la situación de una persona.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Por qué usé solo tres de las seis carencias?</div>
+      <p>Este proyecto no busca medir pobreza en sentido estricto — busca medir si la Pensión para el Bienestar cambió las condiciones de vida de los adultos mayores. Por eso elegí las tres dimensiones más directamente relacionadas con lo que una transferencia monetaria puede mejorar y con los riesgos específicos de las personas de 65 años o más:</p>
+      <div class="carencia-cards">
+        <div class="carencia-card green">
+          <div class="carencia-icon">🍽️</div>
+          <div class="carencia-body">
+            <div class="carencia-name">Alimentación</div>
+            <p class="carencia-desc">Es la dimensión más directamente afectada por tener más dinero disponible. Con más ingreso, las personas mayores pueden comprar mejor comida sin depender de otros.</p>
+            <div class="carencia-method">Medición: gasto alimentario per cápita del hogar por debajo del percentil 25 nacional ponderado. Esto significa que se ordenaron todos los hogares de México de menor a mayor gasto en comida por persona, y se marcó con carencia al 25% que menos gasta. Se usó este indicador como aproximación porque la Escala Mexicana de Seguridad Alimentaria (EMSA) — que usa el CONEVAL — no está disponible en todos los años del panel 2016–2024.</div>
+          </div>
+        </div>
+        <div class="carencia-card red">
+          <div class="carencia-icon">🏥</div>
+          <div class="carencia-body">
+            <div class="carencia-name">Salud</div>
+            <p class="carencia-desc">Es la dimensión de mayor riesgo para personas de 65 años o más y la más vinculada a los cambios en el sistema de cobertura médica del período 2018–2022.</p>
+            <div class="carencia-method">Medición: ausencia de seguridad social, IMSS-Bienestar o cualquier servicio médico prepagado privado. Esta definición sigue directamente los criterios oficiales del CONEVAL para la carencia de acceso a servicios de salud.</div>
+          </div>
+        </div>
+        <div class="carencia-card amber">
+          <div class="carencia-icon">🏠</div>
+          <div class="carencia-body">
+            <div class="carencia-name">Vivienda</div>
+            <p class="carencia-desc">Permite ver si la mejora económica se traduce en condiciones habitacionales más dignas.</p>
+            <div class="carencia-method">Medición: piso de tierra, sin agua intradomiciliaria, sin drenaje, sin electricidad de red, o hacinamiento mayor a 2.5 personas por cuarto. Esta definición sigue directamente los criterios oficiales del CONEVAL para la carencia de calidad y espacios de la vivienda.</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-warning">
+        <p>Las otras tres carencias del CONEVAL — <strong>rezago educativo, seguridad social y servicios básicos</strong> — se excluyeron porque son menos sensibles a cambios de corto plazo en el ingreso o porque ya están implícitas en las dimensiones seleccionadas.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Qué comparamos?</div>
+      <p>Comparamos a dos grupos muy similares: personas de <strong>65 años o más</strong> — que pueden recibir la Pensión para el Bienestar — y personas de <strong>60 a 64 años</strong> — que no son elegibles. Si ambos grupos eran parecidos antes de 2022 y después el grupo de 65+ mejoró más, podemos inferir que algo relacionado con la pensión hizo la diferencia.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Por qué el método de Diferencias en Diferencias y no otro?</div>
+      <p>El método de Diferencias en Diferencias (DiD) se eligió por tres razones prácticas y metodológicas:</p>
+      <div class="numbered-list">
+        <div class="numbered-item">
+          <div class="num">1</div>
+          <p><strong>Es compatible con los datos disponibles.</strong> La ENIGH es una encuesta de corte transversal repetido — no sigue a las mismas personas, sino que encuesta a hogares distintos cada dos años. El DiD funciona exactamente con este tipo de datos porque no necesita seguimiento individual, sino comparar grupos y períodos.</p>
+        </div>
+        <div class="numbered-item">
+          <div class="num">2</div>
+          <p><strong>Controla por factores externos.</strong> Entre 2016 y 2024 ocurrieron muchas cosas además de los cambios en la pensión — la pandemia, la inflación, cambios de gobierno. El DiD cancela esos efectos porque los compara en ambos grupos al mismo tiempo. Si algo afectó a todos por igual, no distorsiona el resultado.</p>
+        </div>
+        <div class="numbered-item">
+          <div class="num">3</div>
+          <p><strong>No requiere un experimento.</strong> No es posible asignar aleatoriamente quién recibe la pensión. El DiD resuelve esto usando al grupo de 60–64 años como punto de comparación natural — un grupo muy similar que simplemente está fuera del umbral de elegibilidad por edad.</p>
+        </div>
+      </div>
+      <div class="callout">
+        <p>El modelo se estimó con el paquete <strong>fixest</strong> de R, usando efectos fijos por entidad federativa, por grupo de edad y por año. Los errores estándar se clusterizaron por entidad para ser conservadores en las inferencias.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Por qué el corte es 2022 y no otro año?</div>
+      <p>El año 2022 marca un cambio de política específico y documentado: ese año se consolidó el aumento del monto de la Pensión para el Bienestar y se reformó la Constitución para establecerla como un derecho universal para todas las personas mayores de 65 años en México. Esto convierte a 2022 en un punto de quiebre natural para el análisis — no fue una decisión arbitraria sino una respuesta a un evento de política pública concreto.</p>
+      <p>Los años anteriores a 2022 — 2016, 2018 y 2020 — funcionan como el período de referencia. Los años 2022 y 2024 son el período posterior al cambio.</p>
+      <p>Vale la pena señalar que 2020 es el año de la pandemia de COVID-19, que afectó a toda la población. Al incluirlo como año pre-tratamiento, el modelo controla implícitamente por ese shock — cualquier efecto diferencial de la pandemia entre los grupos queda absorbido en los efectos fijos por año. El corte en 2022 permite aislar el efecto del cambio de política de los efectos de la pandemia que ya habían ocurrido.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Qué significan los números?</div>
+      <p>Los valores en el mapa miden <strong>puntos porcentuales de cambio en la tasa de carencia</strong>. Un número negativo significa mejora — la carencia bajó más para los adultos mayores que para el grupo de comparación. Un número positivo significa deterioro.</p>
+      <div class="callout callout-warning">
+        <p><strong>Limitación importante:</strong> El modelo asume que ambos grupos habrían seguido trayectorias similares si no hubiera ocurrido el cambio de política en 2022. Este supuesto no se puede probar con certeza — es una limitación reconocida del método.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornamento">— ✦ —</div>
+
+  <!-- SECCIÓN 2: REDES SOCIALES -->
+  <div class="section">
+    <div class="section-number">Sección 02</div>
+    <h2 class="section-title">Las redes sociales — ¿qué capturan y cómo?</h2>
+
+    <div class="subsection">
+      <div class="subsection-title">La fuente</div>
+      <p>Analizamos <strong>6,471 comentarios</strong> de <strong>14 videos de YouTube</strong> sobre la Pensión para el Bienestar, publicados entre 2019 y 2026. Los videos fueron seleccionados por su relevancia temática y volumen de comentarios — dos por año como máximo.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Cómo clasificamos las emociones?</div>
+      <p>Usamos el Léxico NRC de Asociación Palabra-Emoción, desarrollado por Mohammad y Turney (2013). Este léxico clasifica las palabras en ocho emociones — alegría, confianza, miedo, sorpresa, tristeza, disgusto, enojo y anticipación — y dos polaridades: positivo y negativo. El análisis se realizó directamente en español con el paquete <strong>syuzhet</strong> de R.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">¿Qué significa el score de confianza?</div>
+      <p>Es el promedio de palabras asociadas a "confianza" en los comentarios de cada período. Un score más alto significa que la conversación pública usaba más palabras que expresan confianza en el programa. Un score más bajo indica que el tono cambió hacia la incertidumbre o la desconfianza.</p>
+    </div>
+
+    <div class="callout callout-warning">
+      <p><strong>Limitación importante:</strong> Este análisis no mide la opinión de los adultos mayores beneficiarios — mide el discurso público general en YouTube, que tiene un sesgo hacia personas con acceso a internet. Se presenta como una dimensión complementaria, no como una encuesta representativa.</p>
+    </div>
+  </div>
+
+  <div class="ornamento">— ✦ —</div>
+
+  <!-- SECCIÓN 3: HISTORIAS -->
+  <div class="section">
+    <div class="section-number">Sección 03</div>
+    <h2 class="section-title">Las historias — ¿cómo se recopilaron?</h2>
+
+    <div class="subsection">
+      <div class="subsection-title">Las entrevistas presenciales</div>
+      <p>Se realizaron tres entrevistas en el Hub Tecnológico de Monterrey con personas adultas mayores y familiares de beneficiarios. Las entrevistas fueron semiestructuradas con preguntas abiertas — se pedía que describieran su experiencia en sus propios términos, sin preguntar directamente si la pensión había mejorado o empeorado su vida.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">El formulario ciudadano</div>
+      <p>Cualquier persona mayor de 65 años puede compartir su experiencia a través del formulario en línea. Las respuestas se conectan automáticamente al mapa en tiempo real. Los nombres que aparecen en el sitio son ficticios para proteger la identidad de quienes respondieron.</p>
+    </div>
+
+    <div class="callout callout-warning">
+      <p><strong>Limitación importante:</strong> Tres entrevistas presenciales y once respuestas del formulario no son una muestra representativa de los adultos mayores de México. Su función es dar textura y experiencia vivida a los hallazgos estadísticos — no reemplazarlos.</p>
+    </div>
+  </div>
+
+  <div class="ornamento">— ✦ —</div>
+
+  <!-- REFERENCIAS -->
+  <div class="references">
+    <h2>Fuentes y referencias</h2>
+    <p class="ref-item">Instituto Nacional de Estadística y Geografía. (2016–2024). <em>Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH)</em>. <a href="https://www.inegi.org.mx/programas/enigh/" target="_blank">https://www.inegi.org.mx/programas/enigh/</a></p>
+    <p class="ref-item">Consejo Nacional de Evaluación de la Política de Desarrollo Social. (2023). <em>Metodología para la medición multidimensional de la pobreza en México</em> (3.ª ed.). <a href="https://www.coneval.org.mx" target="_blank">https://www.coneval.org.mx</a></p>
+    <p class="ref-item">Angrist, J. D., & Pischke, J. S. (2009). <em>Mostly harmless econometrics</em> (cap. 5, pp. 221–248). Princeton University Press. <a href="https://doi.org/10.1515/9781400829828" target="_blank">https://doi.org/10.1515/9781400829828</a></p>
+    <p class="ref-item">Mohammad, S. M., & Turney, P. D. (2013). Crowdsourcing a word-emotion association lexicon. <em>Computational Intelligence, 29</em>(3), 436–465. <a href="https://doi.org/10.1111/j.1467-8640.2012.00460.x" target="_blank">https://doi.org/10.1111/j.1467-8640.2012.00460.x</a></p>
+    <p class="ref-item">Jockers, M. L. (2020). <em>syuzhet: Extract sentiment and plot arcs from text</em> [Paquete de R]. <a href="https://cran.r-project.org/package=syuzhet" target="_blank">https://cran.r-project.org/package=syuzhet</a></p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-note">
+    Este proyecto fue desarrollado por Sandra Lucía Martínez Flores (A01794929) como proyecto final de la Maestría en Humanidades Digitales en el Tecnológico de Monterrey, 2026. El código y los datos están disponibles bajo solicitud.
+  </div>
+
+</div>
+</body>
+</html>
