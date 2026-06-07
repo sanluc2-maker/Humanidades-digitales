@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emociones por año — Datos con Rostro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#007B7F;--dark:#1a1a1a;--gray:#666;
+  --border:#e5e5e5;--mid:#f7f7f7;--white:#fff;
+}
+body{font-family:'Inter',sans-serif;background:#fff;color:var(--dark);padding:2rem 1.5rem 3rem}
+.wrapper{max-width:820px;margin:0 auto}
+
+/* HEADER */
+.label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#888;margin-bottom:8px}
+h1{font-family:'Playfair Display',serif;font-size:clamp(20px,3.5vw,32px);font-weight:700;color:#111;margin-bottom:6px;line-height:1.2}
+.subtitle{font-size:13px;color:#666;margin-bottom:1.75rem;line-height:1.6;max-width:640px}
+
+/* FILTER BUTTONS */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem}
+.filter-btn{
+  padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;
+  border:1.5px solid var(--border);background:#fff;cursor:pointer;
+  transition:all 0.2s;color:var(--dark);font-family:'Inter',sans-serif;
+}
+.filter-btn:hover{border-color:#111;color:#111}
+.filter-btn.active{color:#fff;border-color:transparent}
+.filter-btn.all{border-color:#111;color:#111}
+.filter-btn.all.active{background:#111}
+
+/* CHART */
+.chart-wrap{position:relative;width:100%;background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.25rem 1rem 0.5rem}
+canvas{width:100%!important}
+
+/* INSIGHT BOX */
+.insight{background:#f7f7f7;border-radius:10px;padding:1rem 1.25rem;margin-top:1.25rem}
+.insight-title{font-size:12px;font-weight:700;color:#111;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+.insight-body{font-size:13px;color:#666;line-height:1.7}
+
+/* NOTE */
+.note{font-size:11px;color:#aaa;margin-top:1rem;font-style:italic;line-height:1.6}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray);cursor:pointer}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+@media(max-width:500px){
+  .filters{gap:6px}
+  .filter-btn{font-size:11px;padding:5px 10px}
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="label">Análisis de sentimiento · YouTube 2019–2026</div>
+  <h1>¿Cómo cambiaron las emociones<br>en la conversación pública?</h1>
+  <p class="subtitle">Score promedio de palabras asociadas a cada emoción NRC por año. Basado en 6,471 comentarios de YouTube sobre la Pensión Bienestar. Selecciona las emociones que quieres comparar.</p>
+
+  <!-- FILTROS -->
+  <div class="filters">
+    <button class="filter-btn all active" onclick="toggleAll(this)">Todas</button>
+    <button class="filter-btn active" data-emocion="Confianza" onclick="toggle(this)" style="--c:#007B7F">Confianza</button>
+    <button class="filter-btn active" data-emocion="Alegría" onclick="toggle(this)" style="--c:#3B8A3E">Alegría</button>
+    <button class="filter-btn active" data-emocion="Enojo" onclick="toggle(this)" style="--c:#C0392B">Enojo</button>
+    <button class="filter-btn active" data-emocion="Miedo" onclick="toggle(this)" style="--c:#8E44AD">Miedo</button>
+    <button class="filter-btn active" data-emocion="Tristeza" onclick="toggle(this)" style="--c:#2980B9">Tristeza</button>
+    <button class="filter-btn active" data-emocion="Anticipación" onclick="toggle(this)" style="--c:#D35400">Anticipación</button>
+    <button class="filter-btn active" data-emocion="Sorpresa" onclick="toggle(this)" style="--c:#B7770D">Sorpresa</button>
+    <button class="filter-btn active" data-emocion="Disgusto" onclick="toggle(this)" style="--c:#7F8C8D">Disgusto</button>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-wrap">
+    <canvas id="chart" height="380"></canvas>
+  </div>
+
+  <!-- LEYENDA -->
+  <div class="legend" id="legend"></div>
+
+  <!-- INSIGHT -->
+  <div class="insight">
+    <div class="insight-title">Lo que muestran los datos</div>
+    <div class="insight-body">
+      <strong>Confianza</strong> dominó en 2019 y alcanzó su segundo pico en 2022 — el año del aumento del monto de la pensión.
+      En 2023 cayó bruscamente junto con casi todas las emociones positivas.
+      <strong>Enojo y Disgusto</strong> alcanzaron su máximo en 2025, coincidiendo con el cambio de administración.
+      <strong>Anticipación y Alegría</strong> subieron en 2024, año electoral e inicio del gobierno de Sheinbaum.
+    </div>
+  </div>
+
+  <p class="note">Nota metodológica: Este indicador refleja el promedio de palabras asociadas a cada emoción en el léxico NRC por año. Es una tendencia descriptiva en el corpus analizado — no representa a la población adulta mayor ni tiene validez estadística inferencial. Los 508 comentarios de 2026 corresponden al primer semestre.</p>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const DATA = {
+  años: [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],
+  n:    [1128,  144,  290, 1001,  958, 1039, 1403,  508],
+  emociones: {
+    "Confianza":    { color:"#007B7F", data:[1.787,0.813,0.821,1.869,0.869,1.583,0.622,0.841] },
+    "Alegría":      { color:"#3B8A3E", data:[0.602,0.458,0.393,0.583,0.373,0.673,0.329,0.382] },
+    "Enojo":        { color:"#C0392B", data:[0.258,0.118,0.190,0.179,0.231,0.196,0.380,0.266] },
+    "Miedo":        { color:"#8E44AD", data:[0.397,0.257,0.203,0.365,0.298,0.503,0.430,0.396] },
+    "Tristeza":     { color:"#2980B9", data:[0.367,0.368,0.421,0.311,0.361,0.300,0.393,0.297] },
+    "Anticipación": { color:"#D35400", data:[0.491,0.410,0.410,0.452,0.401,0.607,0.320,0.388] },
+    "Sorpresa":     { color:"#B7770D", data:[0.233,0.111,0.162,0.213,0.172,0.223,0.170,0.165] },
+    "Disgusto":     { color:"#7F8C8D", data:[0.179,0.097,0.124,0.144,0.109,0.180,0.330,0.205] },
+  }
+};
+
+// Estado activo
+const active = new Set(Object.keys(DATA.emociones));
+
+// Construir datasets
+function buildDatasets() {
+  return Object.entries(DATA.emociones).map(([name, info]) => ({
+    label: name,
+    data: info.data,
+    borderColor: info.color,
+    backgroundColor: info.color + "22",
+    borderWidth: active.has(name) ? 2.5 : 0,
+    pointRadius: active.has(name) ? 4 : 0,
+    pointHoverRadius: active.has(name) ? 6 : 0,
+    tension: 0.4,
+    hidden: !active.has(name),
+    fill: false,
+  }));
+}
+
+// Chart
+const ctx = document.getElementById("chart").getContext("2d");
+const chart = new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: DATA.años,
+    datasets: buildDatasets()
+  },
+  options: {
+    responsive: true,
+    interaction: { mode:"index", intersect:false },
+    plugins: {
+      legend: { display:false },
+      tooltip: {
+        backgroundColor:"#fff",
+        borderColor:"#e5e5e5",
+        borderWidth:1,
+        titleColor:"#1a1a1a",
+        bodyColor:"#666",
+        titleFont:{ family:"Inter", size:13, weight:"600" },
+        bodyFont:{ family:"Inter", size:12 },
+        padding:12,
+        callbacks: {
+          title: ctx => `${ctx[0].label}  ·  n = ${DATA.n[ctx[0].dataIndex].toLocaleString()} comentarios`,
+          label: ctx => `  ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(3)}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid:{ color:"#f0f0f0" },
+        ticks:{ font:{ family:"Inter", size:12 }, color:"#666" }
+      },
+      y: {
+        min:0, max:2.1,
+        grid:{ color:"#f0f0f0" },
+        ticks:{ font:{ family:"Inter", size:11 }, color:"#888",
+          callback: v => v.toFixed(1) }
+      }
+    }
+  }
+});
+
+// Leyenda dinámica
+const legendEl = document.getElementById("legend");
+Object.entries(DATA.emociones).forEach(([name, info]) => {
+  const item = document.createElement("div");
+  item.className = "legend-item";
+  item.innerHTML = `<div class="legend-dot" style="background:${info.color}"></div><span>${name}</span>`;
+  item.onclick = () => {
+    const btn = document.querySelector(`[data-emocion="${name}"]`);
+    if(btn) toggle(btn);
+  };
+  legendEl.appendChild(item);
+});
+
+// Toggle individual
+function toggle(btn) {
+  const name = btn.dataset.emocion;
+  const isActive = active.has(name);
+  if(isActive) {
+    active.delete(name);
+    btn.classList.remove("active");
+    btn.style.background = "";
+    btn.style.color = "";
+    btn.style.borderColor = "";
+  } else {
+    active.add(name);
+    btn.classList.add("active");
+    const color = DATA.emociones[name].color;
+    btn.style.background = color;
+    btn.style.color = "#fff";
+    btn.style.borderColor = color;
+  }
+  updateChart();
+  updateAllBtn();
+}
+
+// Toggle all
+function toggleAll(btn) {
+  const allActive = active.size === Object.keys(DATA.emociones).length;
+  document.querySelectorAll("[data-emocion]").forEach(b => {
+    const name = b.dataset.emocion;
+    const color = DATA.emociones[name].color;
+    if(allActive) {
+      active.delete(name);
+      b.classList.remove("active");
+      b.style.background = "";
+      b.style.color = "";
+      b.style.borderColor = "";
+    } else {
+      active.add(name);
+      b.classList.add("active");
+      b.style.background = color;
+      b.style.color = "#fff";
+      b.style.borderColor = color;
+    }
+  });
+  updateChart();
+  updateAllBtn();
+}
+
+function updateChart() {
+  chart.data.datasets = buildDatasets();
+  chart.update();
+}
+
+function updateAllBtn() {
+  const allBtn = document.querySelector(".filter-btn.all");
+  if(active.size === Object.keys(DATA.emociones).length) {
+    allBtn.classList.add("active");
+    allBtn.style.background = "var(--teal)";
+    allBtn.style.color = "#fff";
+  } else {
+    allBtn.classList.remove("active");
+    allBtn.style.background = "";
+    allBtn.style.color = "var(--teal)";
+  }
+}
+
+// Inicializar colores de botones
+document.querySelectorAll("[data-emocion]").forEach(btn => {
+  const color = DATA.emociones[btn.dataset.emocion].color;
+  btn.style.background = color;
+  btn.style.color = "#fff";
+  btn.style.borderColor = color;
+});
+updateAllBtn();
+</script>
+</body>
+</html>
