@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados — Datos con Rostro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --teal: #007B7F;
+  --dark: #111111;
+  --mid: #444444;
+  --light: #888888;
+  --border: #e8e8e8;
+  --bg: #ffffff;
+  --green: #2d6a30;
+  --red: #8b2020;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.7;
+}
+.page { max-width: 720px; margin: 0 auto; padding: 3.5rem 1.5rem 5rem; }
+
+/* HERO */
+.hero { padding-bottom: 3rem; margin-bottom: 3rem; border-bottom: 1px solid var(--border); }
+.eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--dark); margin-bottom: 1.25rem; }
+.hero-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(26px, 4.5vw, 42px); font-weight: 700; line-height: 1.15; color: var(--dark); margin-bottom: 1rem; }
+.hero-title em { font-style: italic; color: var(--dark); }
+.hero-subtitle { font-size: 15px; color: var(--mid); max-width: 560px; line-height: 1.8; margin-bottom: 1.75rem; }
+.hero-answer { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; color: var(--dark); }
+
+/* BLOCK */
+.block { padding: 3rem 0; border-bottom: 1px solid var(--border); }
+.block:last-of-type { border-bottom: none; }
+.block-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+.block-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.block-title { font-family: 'Playfair Display', serif; font-size: clamp(20px, 3vw, 30px); font-weight: 700; line-height: 1.2; color: var(--dark); margin-bottom: 1rem; }
+.block-body { font-size: 15px; color: var(--mid); line-height: 1.85; margin-bottom: 1.5rem; max-width: 640px; }
+
+/* RESULT PILLS */
+.results { display: flex; flex-direction: column; gap: 1px; margin: 1.75rem 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.result-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: #fff; gap: 12px; }
+.result-row + .result-row { border-top: 1px solid var(--border); }
+.result-left { display: flex; align-items: center; gap: 10px; }
+.result-icon { font-size: 18px; }
+.result-name { font-size: 14px; font-weight: 500; color: var(--dark); }
+.result-stat { font-size: 12px; color: var(--light); margin-top: 1px; }
+.result-val { font-size: 17px; font-weight: 600; white-space: nowrap; }
+.result-val.up { color: var(--green); }
+.result-val.down { color: var(--red); }
+.result-val.flat { color: var(--light); }
+
+/* CITA EDITORIAL */
+.cita { margin: 2rem 0; }
+.cita-mark { font-family: 'Playfair Display', serif; font-size: 48px; line-height: 0.6; color: var(--border); margin-bottom: 8px; }
+.cita-text { font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; color: var(--dark); line-height: 1.7; margin-bottom: 10px; }
+.cita-source { font-size: 11px; color: var(--light); letter-spacing: 0.5px; }
+.cita-source span { color: var(--dark); font-weight: 500; }
+
+/* TIMELINE */
+.timeline { margin: 1.75rem 0; }
+.tl-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--light); margin-bottom: 1.25rem; }
+.tl-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.tl-year { font-size: 12px; font-weight: 500; color: var(--dark); width: 32px; flex-shrink: 0; }
+.tl-track { flex: 1; height: 6px; background: #f0f0f0; border-radius: 99px; overflow: hidden; }
+.tl-fill { height: 100%; border-radius: 99px; }
+.tl-pct { font-size: 12px; font-weight: 500; width: 32px; text-align: right; flex-shrink: 0; }
+.tl-note { font-size: 10px; color: var(--light); flex-shrink: 0; }
+
+/* CONFIANZA */
+.conf-pair { display: flex; align-items: center; gap: 16px; margin: 1.75rem 0; flex-wrap: wrap; }
+.conf-box { flex: 1; min-width: 160px; padding: 1.25rem; border: 1px solid var(--border); border-radius: 10px; }
+.conf-num { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 400; margin-bottom: 4px; }
+.conf-box.peak .conf-num { color: var(--teal); }
+.conf-box.drop .conf-num { color: var(--red); }
+.conf-label { font-size: 12px; color: var(--light); line-height: 1.5; }
+.conf-arrow { font-size: 22px; color: var(--border); flex-shrink: 0; }
+.conf-note { font-size: 12px; color: var(--light); font-style: italic; line-height: 1.6; padding: 12px 16px; background: #fafafa; border-radius: 8px; margin-top: 4px; }
+
+/* CONCLUSION */
+.conclusion { margin: 1.75rem 0; padding: 1.5rem; background: #fafafa; border-radius: 10px; }
+.conclusion p { font-size: 15px; color: var(--mid); line-height: 1.85; }
+.conclusion p + p { margin-top: 0.75rem; }
+
+/* CLOSING */
+.closing { padding: 3rem 0 0; text-align: center; }
+.closing-frase { font-family: 'Playfair Display', serif; font-size: clamp(16px, 2.5vw, 22px); font-style: italic; color: var(--dark); line-height: 1.65; max-width: 520px; margin: 0 auto; }
+
+@media (max-width: 560px) {
+  .conf-arrow { display: none; }
+  .result-stat { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">Resultados · Datos con Rostro</div>
+  <h1 class="hero-title">¿Estuvo mejor el grupo de 65+<br>después de <em>2022</em>?</h1>
+  <p class="hero-subtitle">Una lectura construida con microdatos del ENIGH 2016–2024, análisis de sentimiento en YouTube e historias directas de personas adultas mayores.</p>
+  <div class="hero-answer">"Depende de qué entendemos por mejor."</div>
+  <div style="margin-top:2rem;border-radius:12px;overflow:hidden;max-height:340px">
+    <img src="https://framerusercontent.com/images/jIUig1yenbfGd58uXv23Pejbg.jpg?width=1600&height=896" alt="Persona adulta mayor sonriendo" style="width:100%;object-fit:cover;object-position:center;display:block">
+  </div>
+</div>
+
+<!-- BLOQUE 1: DATOS -->
+<div class="block">
+  <div class="block-label">01 · Lo que miden los datos</div>
+  <h2 class="block-title">Alimentación mejoró.<br>Salud empeoró con la misma contundencia.</h2>
+  <p class="block-body">Comparando el grupo de 65+ años con el grupo de 60–64 antes y después de 2022, los microdatos del ENIGH muestran efectos reales y contradictorios.</p>
+
+  <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:10px;padding:0.9rem 1.1rem;margin-bottom:1.25rem">
+    <p style="font-size:12.5px;color:#555;line-height:1.65;margin:0"><strong style="color:#111">¿Cómo leer el p-value?</strong> Es la probabilidad de que el resultado sea puro azar y no un efecto real. Mientras más pequeño, más sólido el hallazgo: p &lt; 0.001 significa menos de 1 probabilidad entre 1,000 de que sea casualidad.</p>
+  </div>
+
+  <div class="results">
+    <div class="result-row">
+      <div class="result-left">
+        <span class="result-icon">🍽️</span>
+        <div>
+          <div class="result-name">Alimentación</div>
+          <div class="result-stat">p &lt; 0.001 · resultado muy sólido</div>
+        </div>
+      </div>
+      <div class="result-val up">−2.9 pp</div>
+    </div>
+    <div class="result-row">
+      <div class="result-left">
+        <span class="result-icon">🏠</span>
+        <div>
+          <div class="result-name">Vivienda</div>
+          <div class="result-stat">p = 0.037 · efecto pequeño pero real</div>
+        </div>
+      </div>
+      <div class="result-val up">−0.5 pp</div>
+    </div>
+    <div class="result-row">
+      <div class="result-left">
+        <span class="result-icon">🏥</span>
+        <div>
+          <div class="result-name">Salud</div>
+          <div class="result-stat">p &lt; 0.001 · misma contundencia</div>
+        </div>
+      </div>
+      <div class="result-val down">+2.9 pp</div>
+    </div>
+  </div>
+
+  <div class="cita">
+    <div class="cita-mark">"</div>
+    <div class="cita-text">Le doy las gracias porque sentí emoción de ver más de 500 personas ya mayores haciendo su trámite. Gracias por recuperar la dignidad de la gente mayor — quizás muchos solo gocen por primera vez de una pensión.</div>
+    <div class="cita-source">Comentario de YouTube · <span>Veracruz · 2022</span></div>
+  </div>
+
+  <div class="cita">
+    <div class="cita-mark">"</div>
+    <div class="cita-text">Con estos movimientos de la noche a la mañana lo único que logran es confundirlos y exponerlos al peligro — sin saber y ir a cobrar un día que no les corresponde les puede pasar algún accidente.</div>
+    <div class="cita-source">Comentario de YouTube · <span>Veracruz · 2023</span></div>
+  </div>
+
+  <div class="cita">
+    <div class="cita-mark">"</div>
+    <div class="cita-text">Antes tenía que salir a trabajar todos los días para poder comer. Ahora ya no.</div>
+    <div class="cita-source">Cynthia Vallejo · habla por su abuelo de 80 años · <span>Entrevista presencial · Hub Tec Monterrey · 2026</span></div>
+  </div>
+</div>
+
+<!-- BLOQUE 2: REDES -->
+<div class="block">
+  <div class="block-label">02 · Lo que dicen las redes</div>
+  <h2 class="block-title">El tono de la conversación pública<br>no fue lineal.</h2>
+  <p class="block-body">Analizamos 6,471 comentarios de YouTube sobre la Pensión Bienestar entre 2019 y 2026. El porcentaje de comentarios positivos alcanzó su máximo en 2022, cayó bruscamente en 2023, rebotó parcialmente en 2024 y tocó su punto más bajo en 2025. El score de palabras asociadas a confianza fue más alto en 2022 y cayó 48% en el período posterior — una tendencia descriptiva en el corpus, no un efecto causal.</p>
+
+  <div class="timeline">
+    <div class="tl-title">% Comentarios positivos por año</div>
+    <div class="tl-row">
+      <div class="tl-year">2019</div>
+      <div class="tl-track"><div class="tl-fill" style="width:63%;background:#007B7F"></div></div>
+      <div class="tl-pct" style="color:#007B7F">63%</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">2021</div>
+      <div class="tl-track"><div class="tl-fill" style="width:40%;background:#ccc"></div></div>
+      <div class="tl-pct" style="color:#aaa">40%</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year" style="color:#B7770D;font-weight:600">2022</div>
+      <div class="tl-track"><div class="tl-fill" style="width:68%;background:#B7770D"></div></div>
+      <div class="tl-pct" style="color:#B7770D">68%</div>
+      <div class="tl-note">máximo de la serie</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year" style="color:#8b2020">2023</div>
+      <div class="tl-track"><div class="tl-fill" style="width:41%;background:#ccc"></div></div>
+      <div class="tl-pct" style="color:#8b2020">41%</div>
+      <div class="tl-note">caída brusca</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year" style="color:#5551d1;font-weight:600">2024</div>
+      <div class="tl-track"><div class="tl-fill" style="width:59%;background:#5551d1"></div></div>
+      <div class="tl-pct" style="color:#5551d1">59%</div>
+      <div class="tl-note">rebote</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year" style="color:#8b2020;font-weight:600">2025</div>
+      <div class="tl-track"><div class="tl-fill" style="width:33%;background:#8b2020"></div></div>
+      <div class="tl-pct" style="color:#8b2020">33%</div>
+      <div class="tl-note">mínimo</div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year" style="color:#aaa">2026</div>
+      <div class="tl-track"><div class="tl-fill" style="width:42%;background:#ccc"></div></div>
+      <div class="tl-pct" style="color:#aaa">42%</div>
+      <div class="tl-note">1er semestre</div>
+    </div>
+  </div>
+
+  <div class="conf-pair">
+    <div class="conf-box peak">
+      <div class="conf-num">1.87</div>
+      <div class="conf-label">Promedio de palabras<br>de confianza · 2022</div>
+    </div>
+    <div class="conf-arrow">→</div>
+    <div class="conf-box drop">
+      <div class="conf-num">0.97</div>
+      <div class="conf-label">Promedio de palabras<br>de confianza · post-2022</div>
+    </div>
+  </div>
+  <div class="conf-note">Indicador descriptivo basado en el léxico NRC. No tiene p-value ni representa a la población adulta mayor.</div>
+
+  <div class="cita">
+    <div class="cita-mark">"</div>
+    <div class="cita-text">Yo tuve dos negocios, trabajé 38 años. Cuando me quedé sin nada, el apoyo Bienestar me ha ayudado mucho.</div>
+    <div class="cita-source">Comentario de YouTube · <span>Sinaloa · 2024</span></div>
+  </div>
+
+  <div class="cita">
+    <div class="cita-mark">"</div>
+    <div class="cita-text">Aquí en Tijuana están robándole a los ancianos en el banco. A mí me robó la máquina y después gastaron los dos últimos apoyos.</div>
+    <div class="cita-source">Comentario de YouTube · <span>Baja California · 2024</span></div>
+  </div>
+</div>
+
+<!-- BLOQUE 3: CONCLUSIÓN -->
+<div class="block">
+  <div class="block-label">03 · Lo que todo junto dice</div>
+  <h2 class="block-title">Tres fuentes.<br>Una conversación incompleta.</h2>
+
+  <div class="conclusion">
+    <p>Los datos muestran que la alimentación mejoró con la misma contundencia con que la salud empeoró. Las redes muestran que la confianza en el programa subió y después bajó. Y las personas mayores que participaron en este proyecto muestran algo que ninguna de las dos fuentes captura sola.</p>
+    <p>El impacto de la pensión <strong>no es uniforme, no es simple y no cabe en un solo número.</strong> Depende del estado, de la dimensión que se mire, del momento en que se pregunte — y de a quién se le pregunte.</p>
+  </div>
+
+  <div class="cita">
+    <div class="cita-mark">"</div>
+    <div class="cita-text">Mil gracias, cambiaste mi vida.</div>
+    <div class="cita-source">Doña Consuelo · 65 años · Coahuila · <span>Formulario ciudadano</span></div>
+  </div>
+
+  <p style="font-size:14px;color:var(--mid);line-height:1.8;margin-top:1rem">Cinco palabras que ningún modelo estadístico puede generar. Que ningún comentario de YouTube puede reemplazar. Que ningún mapa coroplético puede mostrar. Y que sin embargo, son parte de la respuesta a la pregunta central de este proyecto.</p>
+  <p style="font-size:14px;color:var(--mid);line-height:1.8;margin-top:0.75rem">¿Quieres conocer más historias? Visita la sección de Historias en el sitio.</p>
+</div>
+
+<!-- CIERRE -->
+<div class="closing">
+  <p class="closing-frase">"Medir el bienestar es siempre incompleto. Pero escuchar las voces de quienes lo viven acerca un poco más a la verdad."</p>
+</div>
+
+</div>
+</body>
+</html>
